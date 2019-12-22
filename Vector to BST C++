@@ -1,0 +1,211 @@
+# VECTOR TO BST C++
+# HASSAAN AHMAD WAQAR
+# LUMS-2022-10-0137
+# ALL RIGHTS RESERVED
+
+#--------------------------------------------------------------------------------------------------------------------------------
+
+    #include <iostream>
+    #include <vector>
+
+    using namespace std;
+
+    struct Node{
+
+        int key;
+        Node *left;
+        Node *right;
+
+        Node (){
+            left = NULL;
+            right = NULL;
+        }
+
+        Node (int key){
+            this->key = key;
+            left = NULL;
+            right = NULL;
+        }
+
+    };
+
+
+    Node* vectorToBst(vector<int> bstVector,int firstIndex,int lastIndex){
+        if(firstIndex > lastIndex)
+        {
+            return NULL;
+        }
+        int midIndex = (firstIndex + lastIndex +1 )/2;
+        Node* Mytree = new Node(bstVector[midIndex]);
+
+        Mytree->left = vectorToBst(bstVector, firstIndex, midIndex -1);
+        Mytree->right = vectorToBst(bstVector, midIndex+1, lastIndex);
+
+        return Mytree;
+    }
+
+    void inorderTree(vector<int> &vec, Node* tree){
+        if(tree == NULL) return;
+        inorderTree(vec, tree->left);
+        cout << tree->key << " ";
+        vec.push_back(tree->key);
+        inorderTree(vec, tree->right);
+    }
+
+    Node* Union(Node* treeA,Node* treeB){
+
+        cout << " Values of First Tree: ";
+        vector<int> Vector1;
+        inorderTree(Vector1, treeA);
+        cout << endl;
+
+        cout << " Values of Second Tree: ";
+        vector<int> Vector2;
+        inorderTree(Vector2, treeB);
+        cout << endl;
+
+        vector<int> Vector3;
+        for(int i = 0; i< Vector1.size(); i++)
+        {
+            int marker = 0;
+            for(int k = 0; k<Vector3.size(); k++)
+            {
+                if(Vector3[k] == Vector1[i])
+                {
+                    marker = 1;
+                    break;
+                }
+            }
+            if(marker == 0)
+            { Vector3.push_back(Vector1[i]); }
+            else{ continue; }
+        }
+
+         for(int i = 0; i< Vector2.size(); i++)
+        {
+            int check = 0;
+            for(int j=0; j<Vector1.size(); j++)
+            {
+                if(Vector1[j] == Vector2[i])
+                {
+                    check = 1;
+                    break;
+                }
+            }
+            for(int k = 0; k<Vector3.size(); k++)
+            {
+                if(Vector3[k] == Vector2[i])
+                {
+                    check = 1;
+                    break;
+                }
+            }
+            if(check == 0){
+            Vector3.push_back(Vector2[i]);
+            }
+            else{
+                continue;
+            }
+        }
+
+        // Sort Vector
+        int temp;
+        for(int i =0; i<Vector3.size(); i++)
+        {
+            for(int j=i+1; j< Vector3.size(); j++)
+            {
+                if(Vector3[i] > Vector3[j])
+                {
+                    temp = Vector3[i];
+                    Vector3[i] = Vector3[j];
+                    Vector3[j] = temp;
+                }
+            }
+        }
+
+        int index3 = Vector3.size();
+        Node* Finaltree = vectorToBst(Vector3, 0, index3-1);
+
+        return Finaltree;
+    }
+
+    int main(){
+    int num, num2;
+    vector<int> MyVector;
+    cout << " Enter Number of Elements in first vector: ";
+    cin >> num;
+
+    while(cin.fail())
+    {
+        cin.clear();
+        string dummy;
+        getline(cin, dummy);
+        cout << " Enter a valid number: ";
+        cin >> num;
+    }
+
+    for(int i =0; i<num; i++)
+    {
+    int number;
+    cout << " Enter value " << i+1 <<" : ";
+    cin >> number;
+
+    while(cin.fail())
+    {
+        cin.clear();
+        string dummy;
+        getline(cin, dummy);
+        cout << " Enter a valid number: ";
+        cin >> number;
+    }
+
+    MyVector.push_back(number);
+    }
+    
+    int index = MyVector.size();
+    cout << " Enter Number of Elements in second vector: ";
+    cin >> num2;
+
+    while(cin.fail())
+    {
+        cin.clear();
+        string dummy;
+        getline(cin, dummy);
+        cout << " Enter a valid number: ";
+        cin >> num2;
+    }
+
+    vector<int> MyVector2;
+    for(int i =0; i<num2; i++)
+    {
+    int number;
+    cout << " Enter value " << i+1 <<" : ";
+    cin >> number;
+
+    while(cin.fail())
+    {
+        cin.clear();
+        string dummy;
+        getline(cin, dummy);
+        cout << " Enter a valid number: ";
+        cin >> number;
+    }
+
+    MyVector2.push_back(number);
+    }
+
+    int index2 = MyVector2.size();
+
+    Node* VtoBST = vectorToBst(MyVector, 0, index-1);
+    Node* VtoBST2 = vectorToBst(MyVector2, 0, index2-1);
+
+    Node* UnionTree = Union(VtoBST, VtoBST2);
+
+    cout << " Values of Union Tree: ";
+    vector<int> FinalVector;
+    inorderTree(FinalVector, UnionTree);
+    cout << endl;
+    
+    return 0;
+    }
+
