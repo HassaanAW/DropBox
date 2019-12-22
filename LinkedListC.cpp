@@ -1,3 +1,10 @@
+# LINKED LIST WITH CLASSES C++
+# HASSAAN AHMAD WAQAR
+# LUMS-2022-10-0137
+# ALL RIGHTS RESERVED
+
+#--------------------------------------------------------------------------------------------------------------------------------
+
 #include <iostream>
 using namespace std;
 
